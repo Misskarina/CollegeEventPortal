@@ -70,3 +70,24 @@ CollegeEventPortal/
 │
 ├── pom.xml
 └── README.md
+
+---
+
+## Authentication & Authorization
+
+### 🔐 JWT Authentication
+- On successful login, a **JWT token** is generated
+- Token contains user identity and role
+- Token is sent in `Authorization` header for protected APIs
+
+
+### 👤 Role-Based Access
+- `ROLE_USER` – Can view and add events
+- `ROLE_ADMIN` – Can manage all events (extendable)
+
+Access control is enforced using **Spring Security filters**.
+
+---
+
+
+
