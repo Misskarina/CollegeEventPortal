@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CollegeEventPortal</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Glass card */
+.card {
+    width: 380px;
+    padding: 30px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    color: white;
+    animation: fade 0.6s ease;
+}
+
+@keyframes fade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    background: linear-gradient(90deg,#4facfe,#00c6ff);
+    color: white;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.02);
+}
+
+.link {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.link span {
+    color: #a8d8ff;
+    cursor: pointer;
+}
+
+.link span:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard */
+.dashboard {
+    width: 600px;
+}
+
+.event-list {
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+.event-list li {
+    margin-bottom: 8px;
+}
+
+.logout {
+    background: linear-gradient(90deg,#ff4b5c,#ff1e38);
+}
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIGN UP -->
+<div class="card" id="signupBox">
+    <h2>Create Account</h2>
+    <input id="suName" placeholder="Full Name">
+    <input id="suEmail" placeholder="Email">
+    <input id="suPassword" type="password" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+
+    <div class="link">
+        Already have an account?
+        <span onclick="showLogin()">Login</span>
+    </div>
+</div>
+
+<!-- LOGIN -->
+<div class="card hidden" id="loginBox">
+    <h2>Login</h2>
+    <input id="liEmail" placeholder="Email">
+    <input id="liPassword" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+
+    <div class="link">
+        New user?
+        <span onclick="showSignup()">Create account</span>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card dashboard hidden" id="dashboardBox">
+    <h2>Event Dashboard</h2>
+
+    <input id="eventTitle" placeholder="Event Title">
+    <button onclick="addEvent()">Add Event</button>
+
+    <ul class="event-list" id="eventList"></ul>
+
+    <button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<script>
+const API = "http://localhost:6564/api";
+
+/* ---------- VIEW SWITCH ---------- */
+function showLogin() {
+    signupBox.classList.add("hidden");
+    loginBox.classList.remove("hidden");
+}
+
+function showSignup() {
+    loginBox.classList.add("hidden");
+    signupBox.classList.remove("hidden");
+}
+
+function showDashboard() {
+    signupBox.classList.add("hidden");
+    loginBox.classList.add("hidden");
+    dashboardBox.classList.remove("hidden");
+    loadEvents();
+}
+
+/* ---------- SIGN UP ---------- */
+function signup() {
+    fetch(API + "/auth/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            name: suName.value,
+            email: suEmail.value,
+            password: suPassword.value,
+            role: "ROLE_USER"
+        })
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        showLogin();
+    })
+    .catch(() => alert("Signup failed"));
+}
+
+/* ---------- LOGIN ---------- */
+function login() {
+    fetch(API + "/auth/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            email: liEmail.value,
+            password: liPassword.value
+        })
+    })
+    .then(res => res.text())
+    .then(token => {
+        localStorage.setItem("token", token);
+        showDashboard();
+    })
+    .catch(() => alert("Login failed"));
+}
+
+/* ---------- LOAD EVENTS ---------- */
+function loadEvents() {
+    fetch(API + "/events", {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        eventList.innerHTML = "";
+        data.forEach(e => {
+            const li = document.createElement("li");
+            li.innerText = e.title;
+            eventList.appendChild(li);
+        });
+    });
+}
+
+/* ---------- ADD EVENT ---------- */
+function addEvent() {
+    fetch(API + "/events", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            title: eventTitle.value,
+            description: "College Event",
+            eventDate: "2026-01-10"
+        })
+    }).then(() => {
+        eventTitle.value = "";
+        loadEvents();
+    });
+}
+
+/* ---------- LOGOUT ---------- */
+function logout() {
+    localStorage.removeItem("token");
+    location.reload();
+}
+
+/* ---------- AUTO LOGIN ---------- */
+if (localStorage.getItem("token")) {
+    showDashboard();
+}
+</script>
+
+</body>
+</html>
