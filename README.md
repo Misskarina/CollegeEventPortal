@@ -52,24 +52,30 @@ This project is designed for **academic submission and practical learning**.
 ## Project Structure
 CollegeEventPortal/
 │
-├── src/main/java/com/college/eventportal
-│ ├── controller
-│ ├── service
-│ ├── repository
-│ ├── entity
-│ ├── dto
-│ └── config
-│ ├── SecurityConfig.java
-│ ├── JwtUtil.java
-│ └── JwtAuthFilter.java
-│
-├── src/main/resources
-│ ├── application.properties
-│ └── static
-│ └── index.html
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/
+│       │       └── college/
+│       │           └── eventportal/
+│       │               ├── controller/
+│       │               ├── service/
+│       │               ├── repository/
+│       │               ├── entity/
+│       │               ├── dto/
+│       │               └── config/
+│       │                   ├── SecurityConfig.java
+│       │                   ├── JwtUtil.java
+│       │                   └── JwtAuthFilter.java
+│       │
+│       └── resources/
+│           ├── application.properties
+│           └── static/
+│               └── index.html
 │
 ├── pom.xml
 └── README.md
+
 
 ---
 
