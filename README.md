@@ -39,9 +39,10 @@ This project is designed for **academic submission and practical learning**.
 - JWT (JSON Web Token)
 - Hibernate ORM
 - MySQL / MariaDB
-- Maven
+- RAG AI
 
 ### Frontend
+- React
 - HTML5
 - CSS3
 - JavaScript (ES6)
