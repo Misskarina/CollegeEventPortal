@@ -93,6 +93,16 @@ CollegeEventPortal/
 - `ROLE_ADMIN` – Can manage all events (extendable)
 
 Access control is enforced using **Spring Security filters**.
+--OUTPUT
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/5346a306-db91-40de-be4c-74eb1dafbb89" />
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/9ada399f-3ec3-4d84-8c23-32972ceaa57e" />
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/f8cc39d3-7a03-40ef-b968-afd167a9913c" />
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/b432c27f-e3d4-4c18-b070-a13ff387abbb" />
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/57197b82-3fc4-4c03-bd76-84f73e916ee8" />
 
 ---
 
